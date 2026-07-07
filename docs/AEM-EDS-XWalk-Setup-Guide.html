@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AEM EDS + Universal Editor Setup Guide</title>
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --muted: #555;
+      --border: #ddd;
+      --accent: #e34800;
+      --bg-code: #f5f5f5;
+      --bg-table: #fafafa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 48px;
+      font-size: 11pt;
+    }
+
+    h1 {
+      font-size: 24pt;
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 12px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 16pt;
+      color: var(--accent);
+      margin-top: 32px;
+      page-break-after: avoid;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+    }
+
+    h3 {
+      font-size: 12pt;
+      margin-top: 20px;
+      page-break-after: avoid;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 10pt;
+      margin-bottom: 24px;
+    }
+
+    p, li { margin: 0 0 8px; }
+
+    ul, ol { margin: 8px 0 16px; padding-left: 24px; }
+
+    code {
+      background: var(--bg-code);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 9.5pt;
+      word-break: break-all;
+    }
+
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      overflow-x: auto;
+      font-size: 9pt;
+      line-height: 1.5;
+      page-break-inside: avoid;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      word-break: normal;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 20px;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--bg-table);
+      font-weight: 600;
+    }
+
+    .diagram {
+      background: #f9f9f9;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      font-family: Consolas, monospace;
+      font-size: 9pt;
+      line-height: 1.7;
+      white-space: pre;
+      page-break-inside: avoid;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li {
+      padding: 4px 0 4px 28px;
+      position: relative;
+    }
+
+    .checklist li::before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      font-size: 12pt;
+    }
+
+    .tip {
+      background: #fff8e6;
+      border-left: 4px solid #f5a623;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .warning {
+      background: #fff0f0;
+      border-left: 4px solid #d0021b;
+      padding: 10px 14px;
+      margin: 12px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .cover {
+      text-align: center;
+      padding: 60px 0 40px;
+      page-break-after: always;
+    }
+
+    .cover h1 { border: none; font-size: 28pt; }
+    .cover .subtitle { font-size: 14pt; color: var(--muted); margin-top: 8px; }
+
+    a { color: #0066cc; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .page-break { page-break-before: always; }
+
+    @media print {
+      body { padding: 20px 24px; font-size: 10pt; }
+      h1 { font-size: 20pt; }
+      h2 { font-size: 14pt; }
+      a { color: var(--text); }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cover">
+    <h1>AEM Edge Delivery Services<br>+ Universal Editor</h1>
+    <p class="subtitle">Complete Setup Guide — Step by Step</p>
+    <p class="meta" style="margin-top: 40px;">
+      Project: aem-boilerplate-xwalk<br>
+      Org: m-abhishek2027<br>
+      Version: July 2026
+    </p>
+    <p class="no-print" style="margin-top: 48px; font-size: 10pt; color: #888;">
+      To save as PDF: Press <strong>Ctrl + P</strong> → Destination: <strong>Save as PDF</strong> → Save
+    </p>
+  </div>
+
+  <h1>Setup Guide</h1>
+  <p class="meta">AEM EDS + XWalk + AEM Cloud Sandbox + Universal Editor</p>
+
+  <h2>What You Are Building</h2>
+  <table>
+    <tr><th>System</th><th>Purpose</th></tr>
+    <tr><td>GitHub</td><td>Front-end code (blocks, CSS, JS)</td></tr>
+    <tr><td>AEM Cloud Sandbox</td><td>Content (pages, assets)</td></tr>
+    <tr><td>Edge Delivery Services</td><td>Fast preview (.aem.page) and live (.aem.live)</td></tr>
+    <tr><td>Universal Editor</td><td>Visual content editing in AEM</td></tr>
+  </table>
+
+  <div class="diagram">GitHub (code)  ──►  AEM Code Sync  ──►  EDS Preview/Live
+AEM Sandbox   ──►  fstab.yaml     ──►  EDS Preview/Live
+Universal Editor ──► Edit in AEM  ──►  Publish to EDS</div>
+
+  <h2>Prerequisites</h2>
+  <ul class="checklist">
+    <li>GitHub account</li>
+    <li>Git + Node.js 20+ installed</li>
+    <li>Google Chrome browser</li>
+    <li>AEM as a Cloud Service sandbox (Author access)</li>
+    <li>Adobe ID for AEM + EDS tools</li>
+  </ul>
+
+  <h2>Project URLs (Example)</h2>
+  <table>
+    <tr><th>Item</th><th>URL</th></tr>
+    <tr><td>GitHub Repo</td><td><code>github.com/m-abhishek2027/aem-boilerplate-xwalk</code></td></tr>
+    <tr><td>AEM Author</td><td><code>author-p139816-e1765605.adobeaemcloud.com</code></td></tr>
+    <tr><td>Preview</td><td><code>main--aem-boilerplate-xwalk--m-abhishek2027.aem.page</code></td></tr>
+    <tr><td>Live</td><td><code>main--aem-boilerplate-xwalk--m-abhishek2027.aem.live</code></td></tr>
+  </table>
+
+  <div class="page-break"></div>
+
+  <h2>Phase 1 — GitHub Repository</h2>
+
+  <h3>Step 1: Create empty repo on GitHub</h3>
+  <p>Name: <code>aem-boilerplate-xwalk</code> (Public, no README)</p>
+
+  <div class="warning"><strong>Important:</strong> Use <code>aem-boilerplate-xwalk</code>, NOT plain <code>aem-boilerplate</code> for Universal Editor.</div>
+
+  <h3>Step 2: Import Adobe template code</h3>
+  <pre><code>cd D:\eds
+git clone https://github.com/m-abhishek2027/aem-boilerplate-xwalk.git
+cd aem-boilerplate-xwalk
+git remote add template https://github.com/adobe-rnd/aem-boilerplate-xwalk.git
+git fetch template main
+git checkout -f -B main template/main
+git push -u origin main</code></pre>
+
+  <h3>Step 3: Local install</h3>
+  <pre><code>npm install
+npm run lint</code></pre>
+
+  <h2>Phase 2 — Connect AEM Sandbox (fstab.yaml)</h2>
+
+  <h3>Edit fstab.yaml in repo root:</h3>
+  <pre><code>mountpoints:
+  /:
+    url: "https://author-p139816-e1765605.adobeaemcloud.com/bin/franklin.delivery/m-abhishek2027/aem-boilerplate-xwalk/main"
+    type: "markup"
+    suffix: ".html"</code></pre>
+
+  <p>Replace <code>author-pXXXX-eYYYY</code> with your AEM Author host.</p>
+
+  <pre><code>git add fstab.yaml
+git commit -m "Connect AEM sandbox author as content source"
+git push origin main</code></pre>
+
+  <h2>Phase 3 — AEM Code Sync</h2>
+  <ol>
+    <li>Open: <code>github.com/apps/aem-code-sync</code></li>
+    <li>Select <strong>Only select repositories</strong></li>
+    <li>Choose <code>aem-boilerplate-xwalk</code></li>
+    <li>Save → confirm "AEM Code Sync registered"</li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <h2>Phase 4 — User Admin</h2>
+  <ol>
+    <li>Open: <code>tools.aem.live/tools/user-admin</code></li>
+    <li>Sign in to project → allow pop-ups</li>
+    <li>Org: <code>m-abhishek2027</code>, Site: <code>aem-boilerplate-xwalk</code></li>
+    <li>Fetch Users → Add your AEM email as <strong>Admin</strong></li>
+  </ol>
+
+  <h2>Phase 5 — paths.json (Universal Editor Fix)</h2>
+
+  <div class="warning"><strong>Required:</strong> Without this file, Universal Editor shows <code>paths.json 404 Not Found</code> error.</div>
+
+  <p>Create <code>paths.json</code> in repo root:</p>
+  <pre><code>{
+  "mappings": [
+    "/content/aem-boilerplate-xwalk/:/"
+  ],
+  "includes": [
+    "/content/aem-boilerplate-xwalk/",
+    "/content/dam/aem-boilerplate-xwalk/"
+  ]
+}</code></pre>
+
+  <pre><code>git add paths.json
+git commit -m "Add paths.json for Universal Editor"
+git push origin main</code></pre>
+
+  <p>Verify: <code>main--aem-boilerplate-xwalk--m-abhishek2027.aem.page/paths.json</code> shows JSON (not 404).</p>
+
+  <h2>Phase 6 — Create AEM Site</h2>
+  <ol>
+    <li>Download template ZIP from <code>github.com/adobe-rnd/aem-boilerplate-xwalk/releases</code></li>
+    <li>AEM Author → Sites → Create → Site from template → Import ZIP</li>
+    <li>Create site with these values:</li>
+  </ol>
+
+  <table>
+    <tr><th>Field</th><th>Value</th></tr>
+    <tr><td>Site name</td><td><code>aem-boilerplate-xwalk</code></td></tr>
+    <tr><td>Project URL</td><td><code>https://main--aem-boilerplate-xwalk--m-abhishek2027.aem.page</code></td></tr>
+  </table>
+
+  <h2>Phase 7 — Universal Editor</h2>
+  <ol>
+    <li>Sites → <code>aem-boilerplate-xwalk</code> → <code>index</code> → <strong>Edit</strong></li>
+    <li>Sign in with Adobe</li>
+    <li>Add/edit components (Cards, Hero, etc.)</li>
+  </ol>
+
+  <div class="page-break"></div>
+
+  <h2>Phase 8 — Publish</h2>
+  <ol>
+    <li>AEM → Tools → Cloud Services → Edge Delivery Services Configuration</li>
+    <li>Properties → Authentication → copy <strong>Technical Account ID</strong></li>
+    <li>User Admin → Add technical account as <strong>Config Admin</strong></li>
+    <li>Universal Editor → <strong>Publish</strong> → Destination: <strong>Preview</strong></li>
+    <li>Check preview URL loads correctly</li>
+  </ol>
+
+  <h2>Phase 9 — Local Development</h2>
+  <pre><code>cd D:\eds\aem-boilerplate-xwalk
+npx @adobe/aem-cli up</code></pre>
+  <p>Open: <code>http://localhost:3000/</code></p>
+
+  <h3>Optional: Local draft content</h3>
+  <pre><code>npx @adobe/aem-cli up --html-folder drafts</code></pre>
+  <p>Create <code>drafts/index.plain.html</code> for local testing without AEM content.</p>
+
+  <h2>Phase 10 — Sidekick (Optional)</h2>
+  <p>Install from Chrome Web Store: <strong>AEM Sidekick</strong> → Pin → Add project on preview URL.</p>
+
+  <h2>Complete Checklist</h2>
+  <ul class="checklist">
+    <li>GitHub repo created and template code pushed</li>
+    <li>npm install successful</li>
+    <li>fstab.yaml updated with Author URL</li>
+    <li>AEM Code Sync installed</li>
+    <li>Admin user added in User Admin</li>
+    <li>paths.json pushed and accessible (not 404)</li>
+    <li>AEM site template imported</li>
+    <li>Site created with correct Project URL</li>
+    <li>Universal Editor opens without error</li>
+    <li>Technical account → Config Admin</li>
+    <li>Preview publish successful</li>
+    <li>Local aem-cli works</li>
+  </ul>
+
+  <h2>Troubleshooting</h2>
+  <table>
+    <tr><th>Problem</th><th>Fix</th></tr>
+    <tr><td>Preview 404</td><td>Publish from UE; check fstab.yaml</td></tr>
+    <tr><td>paths.json 404 in UE</td><td>Add paths.json, push, wait 2–3 min</td></tr>
+    <tr><td>Publish fails</td><td>Add technical account as Config Admin</td></tr>
+    <tr><td>Empty repo</td><td>Import from adobe-rnd/aem-boilerplate-xwalk</td></tr>
+    <tr><td>Code not on preview</td><td>git push; wait for Code Sync</td></tr>
+  </table>
+
+  <h2>Key Files</h2>
+  <table>
+    <tr><th>File</th><th>Purpose</th></tr>
+    <tr><td>fstab.yaml</td><td>Links EDS to AEM Author content</td></tr>
+    <tr><td>paths.json</td><td>Maps AEM paths to public URLs (UE needs this)</td></tr>
+    <tr><td>component-definition.json</td><td>Block definitions for UE</td></tr>
+    <tr><td>component-models.json</td><td>Field models for blocks</td></tr>
+    <tr><td>blocks/*</td><td>Block CSS and JS</td></tr>
+  </table>
+
+  <h2>Official Links</h2>
+  <ul>
+    <li><a href="https://www.aem.live/developer/ue-tutorial">Universal Editor Tutorial</a></li>
+    <li><a href="https://github.com/adobe-rnd/aem-boilerplate-xwalk">XWalk Template</a></li>
+    <li><a href="https://tools.aem.live/tools/user-admin/index.html">User Admin</a></li>
+    <li><a href="https://tools.aem.live/tools/site-admin/index.html">Site Admin</a></li>
+    <li><a href="https://www.aem.live/developer/authoring-path-mapping">Path Mapping Docs</a></li>
+  </ul>
+
+  <p class="meta" style="margin-top: 40px; text-align: center;">— End of Guide —</p>
+
+</body>
+</html>
