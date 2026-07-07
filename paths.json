@@ -1,0 +1,9 @@
+{
+  "mappings": [
+    "/content/aem-boilerplate-xwalk/:/"
+  ],
+  "includes": [
+    "/content/aem-boilerplate-xwalk/",
+    "/content/dam/aem-boilerplate-xwalk/"
+  ]
+}
